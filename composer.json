@@ -1,0 +1,45 @@
+{
+  "name": "busfactor/busfactor",
+  "type": "library",
+  "description": "A framework-agnostic set of components for building DDD/CQRS/EventSourcing-flavored systems in PHP",
+  "homepage": "https://github.com/busfactor/busfactor",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Maxime Gosselin",
+      "email": "maxime.gosselin@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "ramsey/uuid": "^3.8"
+  },
+  "require-dev": {
+    "ext-pdo_sqlite": "*",
+    "friendsofphp/php-cs-fixer": "^2.15",
+    "illuminate/cache": "^5.8",
+    "phing/phing": "^2.16",
+    "phpro/grumphp": "^0.14",
+    "phpstan/phpstan": "^0.11.8",
+    "phpunit/phpunit": "^7.0",
+    "squizlabs/php_codesniffer": "^3.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "BusFactor\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BusFactor\\": "tests"
+    }
+  },
+  "scripts": {
+    "format": "php-cs-fixer fix",
+    "scan": "phpstan analyse -l 3 src tests",
+    "style": "phpcs -p -s",
+    "test": "phpunit"
+  }
+}

@@ -1,0 +1,78 @@
+<?php
+declare(strict_types=1);
+
+namespace BusFactor\ProjectionStore;
+
+use BusFactor\Projection\ProjectionInterface;
+
+class TransactionalStore implements ProjectionStoreInterface
+{
+    /** @var AdapterInterface */
+    private $adapter;
+
+    /** @var UnitOfWork */
+    private $unit;
+
+    public function __construct(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+        $this->unit = new UnitOfWork();
+    }
+
+    public function getAdapter(): AdapterInterface
+    {
+        return $this->adapter;
+    }
+
+    public function find(string $id, string $class): ProjectionInterface
+    {
+        if ($this->unit->hasStored($id, $class)) {
+            return array_values(array_filter(
+                $this->unit->getStored(),
+                function (ProjectionInterface $projection) use ($id, $class): bool {
+                    return $projection->getId() === $id && $projection instanceof $class;
+                }
+            ))[0];
+        }
+        if ($this->unit->hasRemoved($id, $class)) {
+            throw ProjectionNotFoundException::forProjection($class, $id);
+        }
+        return $this->adapter->find($id, $class);
+    }
+
+    public function has(string $id, string $class): bool
+    {
+        if ($this->unit->hasStored($id, $class)) {
+            return true;
+        }
+        if ($this->unit->hasRemoved($id, $class)) {
+            return false;
+        }
+        return $this->adapter->has($id, $class);
+    }
+
+    public function store(ProjectionInterface $projection): void
+    {
+        $this->unit = $this->unit->store($projection);
+    }
+
+    public function remove(string $id, string $class): void
+    {
+        $this->unit = $this->unit->remove($id, $class);
+    }
+
+    public function purge(): void
+    {
+        $this->adapter->purge();
+    }
+
+    public function commit(): void
+    {
+        $this->adapter->commit($this->unit);
+    }
+
+    public function rollback(): void
+    {
+        $this->unit = new UnitOfWork();
+    }
+}
