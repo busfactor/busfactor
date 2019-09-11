@@ -14,7 +14,7 @@ class MemcachedProjectionStoreAdapterTest extends TestCase
     {
         /** @var Memcached $memcached */
         $memcached = $this->createMock(Memcached::class);
-        $store = new ProjectionStore(new MemcachedProjectionStoreAdapter($memcached));
+        $store = new ProjectionStore(new MemcachedProjectionStoreAdapterMock($memcached));
 
         $store->store(new TestProjection('123'));
         $store->commit();

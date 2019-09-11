@@ -69,6 +69,7 @@ class TransactionalStore implements ProjectionStoreInterface
     public function commit(): void
     {
         $this->adapter->commit($this->unit);
+        $this->unit = new UnitOfWork();
     }
 
     public function rollback(): void

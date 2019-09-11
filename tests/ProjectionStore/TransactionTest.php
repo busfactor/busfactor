@@ -25,4 +25,21 @@ class TransactionTest extends TestCase
         $store->commit();
         $this->assertTrue($store->has('123', TestProjection::class));
     }
+
+    /** @test */
+    public function it_resets_unit_of_work_after_commit(): void
+    {
+        $adapter = new TestInMemoryProjectionStoreAdapter();
+        $store = new ProjectionStore($adapter);
+
+        $store->store(new TestProjection('123'));
+        $store->remove('234', TestProjection::class);
+        $store->commit();
+        $this->assertCount(1, $adapter->getCommitedUnitOfWork()->getStored());
+        $this->assertCount(1, $adapter->getCommitedUnitOfWork()->getRemoved());
+
+        $store->commit();
+        $this->assertCount(0, $adapter->getCommitedUnitOfWork()->getStored());
+        $this->assertCount(0, $adapter->getCommitedUnitOfWork()->getRemoved());
+    }
 }
