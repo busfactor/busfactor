@@ -4,7 +4,7 @@
 [![Build Status](https://img.shields.io/travis/busfactor/busfactor.svg)](https://travis-ci.org/busfactor/busfactor)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A framework-agnostic set of components for building DDD/CQRS/EventSourcing-flavored systems in PHP.
+BusFactor is a modern PHP library providing several components you can mix and match to implement the CQRS and Event Sourcing patterns in your application.
 
 ## Install
 

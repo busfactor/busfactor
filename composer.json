@@ -1,7 +1,7 @@
 {
   "name": "busfactor/busfactor",
   "type": "library",
-  "description": "A framework-agnostic set of components for building DDD/CQRS/EventSourcing-flavored systems in PHP",
+  "description": "CQRS and Event Sourcing infrastructure for modern PHP",
   "homepage": "https://github.com/busfactor/busfactor",
   "license": "MIT",
   "authors": [
