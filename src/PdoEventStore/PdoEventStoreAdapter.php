@@ -203,14 +203,17 @@ class PdoEventStoreAdapter implements AdapterInterface
         );
         $query = $this->pdo->prepare($sql);
         $query->execute($filteredEvents);
-        foreach ($query->fetchAll() as $row) {
-            $event = $this->buildEventFromRow($row);
-            $inspector->inspect(
-                $row[self::sanitizeSqlName($this->config->getAlias('stream_id'))],
-                $row[self::sanitizeSqlName($this->config->getAlias('stream_type'))],
-                $event
-            );
+        $events = [];
+        while ($row = $query->fetch()) {
+            $events[] = [
+                'stream_id' => $row[self::sanitizeSqlName($this->config->getAlias('stream_id'))],
+                'stream_type' => $row[self::sanitizeSqlName($this->config->getAlias('stream_type'))],
+                'event' => $this->buildEventFromRow($row),
+            ];
         };
+        foreach ($events as $event) {
+            $inspector->inspect($event['stream_id'], $event['stream_type'], $event['event']);
+        }
     }
 
     public function purge(): void
