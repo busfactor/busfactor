@@ -5,6 +5,7 @@ namespace BusFactor\Scenario\Constraint;
 
 use BusFactor\Scenario\UpdatedProjections;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionClass;
 
 class ProjectionsMustContainExactly extends Constraint
 {
@@ -19,7 +20,9 @@ class ProjectionsMustContainExactly extends Constraint
 
     public function __construct(int $count, string $projectionClass)
     {
-        parent::__construct();
+        if ((new ReflectionClass(Constraint::class))->hasMethod('__construct')) {
+            parent::__construct();
+        }
         $this->count = $count;
         $this->projectionClass = $projectionClass;
         $this->found = 0;

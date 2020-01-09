@@ -17,7 +17,7 @@ class PdoEventStoreTest extends TestCase
     /** @var PdoInterface */
     private $pdo;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

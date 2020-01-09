@@ -5,6 +5,7 @@ namespace BusFactor\Scenario\Constraint;
 
 use BusFactor\Scenario\PublishedStreams;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionClass;
 
 class StreamsMustContain extends Constraint
 {
@@ -13,7 +14,9 @@ class StreamsMustContain extends Constraint
 
     public function __construct(string $eventClass)
     {
-        parent::__construct();
+        if ((new ReflectionClass(Constraint::class))->hasMethod('__construct')) {
+            parent::__construct();
+        }
         $this->eventClass = $eventClass;
     }
 

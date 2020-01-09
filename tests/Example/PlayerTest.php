@@ -29,7 +29,7 @@ class PlayerTest extends TestCase
     /** @var Scenario */
     private $scenario;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

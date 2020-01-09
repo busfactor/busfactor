@@ -5,6 +5,7 @@ namespace BusFactor\Scenario\Constraint;
 
 use BusFactor\Scenario\PublishedStreams;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionClass;
 
 class StreamsMustCount extends Constraint
 {
@@ -13,7 +14,9 @@ class StreamsMustCount extends Constraint
 
     public function __construct(int $count)
     {
-        parent::__construct();
+        if ((new ReflectionClass(Constraint::class))->hasMethod('__construct')) {
+            parent::__construct();
+        }
         $this->count = $count;
     }
 

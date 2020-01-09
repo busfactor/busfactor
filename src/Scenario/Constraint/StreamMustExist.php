@@ -5,6 +5,7 @@ namespace BusFactor\Scenario\Constraint;
 
 use BusFactor\Scenario\PublishedStreams;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionClass;
 
 class StreamMustExist extends Constraint
 {
@@ -13,7 +14,9 @@ class StreamMustExist extends Constraint
 
     public function __construct(string $streamId)
     {
-        parent::__construct();
+        if ((new ReflectionClass(Constraint::class))->hasMethod('__construct')) {
+            parent::__construct();
+        }
         $this->streamId = $streamId;
     }
 

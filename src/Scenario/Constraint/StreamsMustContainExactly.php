@@ -5,6 +5,7 @@ namespace BusFactor\Scenario\Constraint;
 
 use BusFactor\Scenario\PublishedStreams;
 use PHPUnit\Framework\Constraint\Constraint;
+use ReflectionClass;
 
 class StreamsMustContainExactly extends Constraint
 {
@@ -19,7 +20,9 @@ class StreamsMustContainExactly extends Constraint
 
     public function __construct(int $count, string $eventClass)
     {
-        parent::__construct();
+        if ((new ReflectionClass(Constraint::class))->hasMethod('__construct')) {
+            parent::__construct();
+        }
         $this->count = $count;
         $this->eventClass = $eventClass;
         $this->found = 0;
