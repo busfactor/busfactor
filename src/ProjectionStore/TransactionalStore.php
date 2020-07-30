@@ -48,12 +48,12 @@ class TransactionalStore implements ProjectionStoreInterface
 
     public function store(ProjectionInterface $projection): void
     {
-        $this->unit = $this->unit->store($projection);
+        $this->unit->store($projection);
     }
 
     public function remove(string $id, string $class): void
     {
-        $this->unit = $this->unit->remove($id, $class);
+        $this->unit->remove($id, $class);
     }
 
     public function purge(): void

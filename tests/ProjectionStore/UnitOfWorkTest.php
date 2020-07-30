@@ -14,21 +14,21 @@ class UnitOfWorkTest extends TestCase
         $this->assertEmpty($unit->getStored());
         $this->assertEmpty($unit->getRemoved());
 
-        $unit = $unit->store(new TestProjection('123'));
+        $unit->store(new TestProjection('123'));
         $this->assertCount(1, $unit->getStored());
         $this->assertNotNull($unit->getOneStored('123', TestProjection::class));
         $this->assertEmpty($unit->getRemoved());
 
-        $unit = $unit->remove('123', TestProjection::class);
+        $unit->remove('123', TestProjection::class);
         $this->assertEmpty($unit->getStored());
         $this->assertNull($unit->getOneStored('123', TestProjection::class));
         $this->assertCount(1, $unit->getRemoved());
 
-        $unit = $unit->remove('123', TestProjection::class);
+        $unit->remove('123', TestProjection::class);
         $this->assertEmpty($unit->getStored());
         $this->assertCount(1, $unit->getRemoved());
 
-        $unit = $unit->store(new TestProjection('123'));
+        $unit->store(new TestProjection('123'));
         $this->assertCount(1, $unit->getStored());
         $this->assertEmpty($unit->getRemoved());
     }

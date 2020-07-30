@@ -13,22 +13,18 @@ class UnitOfWork
     /** @var ProjectionDescriptor[] */
     private $remove = [];
 
-    public function store(ProjectionInterface $projection): self
+    public function store(ProjectionInterface $projection): void
     {
         $descriptor = ProjectionDescriptor::fromProjection($projection);
-        $clone = clone $this;
-        $clone->store[$descriptor->getKey()] = $projection;
-        unset($clone->remove[$descriptor->getKey()]);
-        return $clone;
+        $this->store[$descriptor->getKey()] = $projection;
+        unset($this->remove[$descriptor->getKey()]);
     }
 
-    public function remove(string $id, string $class): self
+    public function remove(string $id, string $class): void
     {
         $descriptor = new ProjectionDescriptor($id, $class);
-        $clone = clone $this;
-        $clone->remove[$descriptor->getKey()] = $descriptor;
-        unset($clone->store[$descriptor->getKey()]);
-        return $clone;
+        $this->remove[$descriptor->getKey()] = $descriptor;
+        unset($this->store[$descriptor->getKey()]);
     }
 
     /** @return ProjectionInterface[] */
