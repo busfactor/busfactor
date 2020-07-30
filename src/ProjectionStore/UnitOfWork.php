@@ -37,6 +37,12 @@ class UnitOfWork
         return array_values($this->store);
     }
 
+    public function getOneStored(string $id, string $class): ?ProjectionInterface
+    {
+        $descriptor = new ProjectionDescriptor($id, $class);
+        return $this->store[$descriptor->getKey()] ?? null;
+    }
+
     /** @return ProjectionDescriptor[] */
     public function getRemoved(): array
     {

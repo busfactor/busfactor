@@ -27,12 +27,7 @@ class TransactionalStore implements ProjectionStoreInterface
     public function find(string $id, string $class): ProjectionInterface
     {
         if ($this->unit->hasStored($id, $class)) {
-            return array_values(array_filter(
-                $this->unit->getStored(),
-                function (ProjectionInterface $projection) use ($id, $class): bool {
-                    return $projection->getId() === $id && $projection instanceof $class;
-                }
-            ))[0];
+            return $this->unit->getOneStored($id, $class);
         }
         if ($this->unit->hasRemoved($id, $class)) {
             throw ProjectionNotFoundException::forProjection($class, $id);
