@@ -32,10 +32,10 @@ class PdoAggregateStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select %s from %s where %s = :aggregateId and %s = :aggregateType',
-            self::sanitizeSqlName($this->config->getAlias('aggregate_payload')),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_id')),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_type'))
+            $this->config->getAlias('aggregate_payload'),
+            $this->config->getTable(),
+            $this->config->getAlias('aggregate_id'),
+            $this->config->getAlias('aggregate_type'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -60,9 +60,9 @@ class PdoAggregateStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select count(*) aggregate_count from %s where %s = :aggregateId and %s = :aggregateType',
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_id')),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_type'))
+            $this->config->getTable(),
+            $this->config->getAlias('aggregate_id'),
+            $this->config->getAlias('aggregate_type'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -80,13 +80,13 @@ class PdoAggregateStoreAdapter implements AdapterInterface
         $this->remove($id, $type);
 
         $insertColumns = [
-            self::sanitizeSqlName($this->config->getAlias('aggregate_id')),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_type')),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_payload')),
+            $this->config->getAlias('aggregate_id'),
+            $this->config->getAlias('aggregate_type'),
+            $this->config->getAlias('aggregate_payload'),
         ];
         $sql = sprintf(
             'insert into %s (%s) values (:id, :type, :payload)',
-            self::sanitizeSqlName($this->config->getTable()),
+            $this->config->getTable(),
             implode(',', $insertColumns)
         );
         $query = $this->pdo->prepare($sql);
@@ -101,9 +101,9 @@ class PdoAggregateStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'delete from %s where %s = :id and %s = :type',
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_id')),
-            self::sanitizeSqlName($this->config->getAlias('aggregate_type'))
+            $this->config->getTable(),
+            $this->config->getAlias('aggregate_id'),
+            $this->config->getAlias('aggregate_type'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -114,15 +114,7 @@ class PdoAggregateStoreAdapter implements AdapterInterface
 
     public function purge(): void
     {
-        $sql = sprintf(
-            'delete from %s where 1=1',
-            self::sanitizeSqlName($this->config->getTable())
-        );
+        $sql = sprintf('delete from %s where 1=1', $this->config->getTable());
         $this->pdo->exec($sql);
-    }
-
-    private function sanitizeSqlName(string $value): string
-    {
-        return preg_replace('/[^a-zA-Z_]*/', '', $value);
     }
 }

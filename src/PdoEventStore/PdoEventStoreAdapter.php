@@ -35,23 +35,23 @@ class PdoEventStoreAdapter implements AdapterInterface
     public function fetch(string $streamId, string $streamType, int $fromVersion = 0): Stream
     {
         $selectColumns = [
-            self::sanitizeSqlName($this->config->getAlias('stream_type')),
-            self::sanitizeSqlName($this->config->getAlias('stream_id')),
-            self::sanitizeSqlName($this->config->getAlias('stream_version')),
-            self::sanitizeSqlName($this->config->getAlias('event_id')),
-            self::sanitizeSqlName($this->config->getAlias('event_class')),
-            self::sanitizeSqlName($this->config->getAlias('event_metadata')),
-            self::sanitizeSqlName($this->config->getAlias('event_payload')),
-            self::sanitizeSqlName($this->config->getAlias('event_time')),
+            $this->config->getAlias('stream_type'),
+            $this->config->getAlias('stream_id'),
+            $this->config->getAlias('stream_version'),
+            $this->config->getAlias('event_id'),
+            $this->config->getAlias('event_class'),
+            $this->config->getAlias('event_metadata'),
+            $this->config->getAlias('event_payload'),
+            $this->config->getAlias('event_time'),
         ];
         $sql = sprintf(
             'select %s from %s where %s = :streamType and %s = :streamId and %s >= :streamVersion order by %s asc',
             implode(',', $selectColumns),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('stream_type')),
-            self::sanitizeSqlName($this->config->getAlias('stream_id')),
-            self::sanitizeSqlName($this->config->getAlias('stream_version')),
-            self::sanitizeSqlName($this->config->getAlias('stream_version'))
+            $this->config->getTable(),
+            $this->config->getAlias('stream_type'),
+            $this->config->getAlias('stream_id'),
+            $this->config->getAlias('stream_version'),
+            $this->config->getAlias('stream_version'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -76,9 +76,9 @@ class PdoEventStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select count(*) event_count from %s where %s = :streamType and %s = :streamId',
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('stream_type')),
-            self::sanitizeSqlName($this->config->getAlias('stream_id'))
+            $this->config->getTable(),
+            $this->config->getAlias('stream_type'),
+            $this->config->getAlias('stream_id'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -93,10 +93,10 @@ class PdoEventStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select max(%s) max_stream_version from %s where %s = :streamType and %s = :streamId',
-            self::sanitizeSqlName($this->config->getAlias('stream_version')),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('stream_type')),
-            self::sanitizeSqlName($this->config->getAlias('stream_id'))
+            $this->config->getAlias('stream_version'),
+            $this->config->getTable(),
+            $this->config->getAlias('stream_type'),
+            $this->config->getAlias('stream_id'),
         );
         $query = $this->pdo->prepare($sql);
         $query->execute([
@@ -128,18 +128,18 @@ class PdoEventStoreAdapter implements AdapterInterface
         }
 
         $insertColumns = [
-            self::sanitizeSqlName($this->config->getAlias('stream_type')),
-            self::sanitizeSqlName($this->config->getAlias('stream_id')),
-            self::sanitizeSqlName($this->config->getAlias('stream_version')),
-            self::sanitizeSqlName($this->config->getAlias('event_id')),
-            self::sanitizeSqlName($this->config->getAlias('event_class')),
-            self::sanitizeSqlName($this->config->getAlias('event_metadata')),
-            self::sanitizeSqlName($this->config->getAlias('event_payload')),
-            self::sanitizeSqlName($this->config->getAlias('event_time')),
+            $this->config->getAlias('stream_type'),
+            $this->config->getAlias('stream_id'),
+            $this->config->getAlias('stream_version'),
+            $this->config->getAlias('event_id'),
+            $this->config->getAlias('event_class'),
+            $this->config->getAlias('event_metadata'),
+            $this->config->getAlias('event_payload'),
+            $this->config->getAlias('event_time'),
         ];
         $sql = sprintf(
             'insert into %s (%s) values (:streamType, :streamId, :version, :id, :class, :metadata, :payload, :time)',
-            self::sanitizeSqlName($this->config->getTable()),
+            $this->config->getTable(),
             implode(',', $insertColumns)
         );
         $query = $this->pdo->prepare($sql);
@@ -185,7 +185,7 @@ class PdoEventStoreAdapter implements AdapterInterface
             $questionMarks = str_repeat('?,', count($filteredEvents) - 1) . '?';
             $whereClause = sprintf(
                 'where %s in (%s)',
-                self::sanitizeSqlName($this->config->getAlias('event_class')),
+                $this->config->getAlias('event_class'),
                 $questionMarks
             );
         } else {
@@ -195,9 +195,9 @@ class PdoEventStoreAdapter implements AdapterInterface
         $limitClause = $max ? 'limit ' . $max : '';
         $sql = sprintf(
             'select * from %s %s order by %s %s %s',
-            self::sanitizeSqlName($this->config->getTable()),
+            $this->config->getTable(),
             $whereClause,
-            self::sanitizeSqlName($this->config->getAlias('sequence')),
+            $this->config->getAlias('sequence'),
             $reverse ? 'desc' : 'asc',
             $limitClause
         );
@@ -206,8 +206,8 @@ class PdoEventStoreAdapter implements AdapterInterface
         $events = [];
         while ($row = $query->fetch()) {
             $events[] = [
-                'stream_id' => $row[self::sanitizeSqlName($this->config->getAlias('stream_id'))],
-                'stream_type' => $row[self::sanitizeSqlName($this->config->getAlias('stream_type'))],
+                'stream_id' => $row[$this->config->getAlias('stream_id')],
+                'stream_type' => $row[$this->config->getAlias('stream_type')],
                 'event' => $this->buildEventFromRow($row),
             ];
         };
@@ -218,26 +218,23 @@ class PdoEventStoreAdapter implements AdapterInterface
 
     public function purge(): void
     {
-        $sql = sprintf(
-            'delete from %s where 1=1',
-            self::sanitizeSqlName($this->config->getTable())
-        );
+        $sql = sprintf('delete from %s where 1=1', $this->config->getTable());
         $this->pdo->exec($sql);
     }
 
     private function buildEventFromRow(array $row): Envelope
     {
-        $version = (int) $row[self::sanitizeSqlName($this->config->getAlias('stream_version'))];
+        $version = (int) $row[$this->config->getAlias('stream_version')];
         $metadata = new Metadata(json_decode(
-            $row[self::sanitizeSqlName($this->config->getAlias('event_metadata'))],
+            $row[$this->config->getAlias('event_metadata')],
             true
         ));
-        $payload = json_decode($row[self::sanitizeSqlName($this->config->getAlias('event_payload'))], true);
-        $class = $row[self::sanitizeSqlName($this->config->getAlias('event_class'))];
+        $payload = json_decode($row[$this->config->getAlias('event_payload')], true);
+        $class = $row[$this->config->getAlias('event_class')];
         $classRevision = (int) $metadata->get('revision');
         /** @var StreamEventInterface $event */
         $event = $class::deserialize($payload);
-        $recordTime = new DateTimeImmutable($row[self::sanitizeSqlName($this->config->getAlias('event_time'))]);
+        $recordTime = new DateTimeImmutable($row[$this->config->getAlias('event_time')]);
 
         if ($event::getRevision() != $classRevision) {
             throw new RevisionMismatchException(sprintf(
@@ -272,10 +269,5 @@ class PdoEventStoreAdapter implements AdapterInterface
         }
 
         return $values;
-    }
-
-    private function sanitizeSqlName(string $value): string
-    {
-        return preg_replace('/[^a-zA-Z_]*/', '', $value);
     }
 }

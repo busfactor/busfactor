@@ -35,10 +35,10 @@ class PdoProjectionStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select %s from %s where %s = :projectionId and %s = :projectionClass',
-            self::sanitizeSqlName($this->config->getAlias('projection_payload')),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('projection_id')),
-            self::sanitizeSqlName($this->config->getAlias('projection_class'))
+            $this->config->getAlias('projection_payload'),
+            $this->config->getTable(),
+            $this->config->getAlias('projection_id'),
+            $this->config->getAlias('projection_class'),
         );
         $query = $this->pdo->prepare($sql);
         $success = $query->execute([
@@ -64,9 +64,9 @@ class PdoProjectionStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select %s from %s where %s = :projectionClass',
-            self::sanitizeSqlName($this->config->getAlias('projection_payload')),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('projection_class'))
+            $this->config->getAlias('projection_payload'),
+            $this->config->getTable(),
+            $this->config->getAlias('projection_class'),
         );
         $query = $this->pdo->prepare($sql);
         $success = $query->execute([
@@ -91,11 +91,11 @@ class PdoProjectionStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'select %s, %s from %s where %s = :projectionId and %s = :projectionClass',
-            self::sanitizeSqlName($this->config->getAlias('projection_id')),
-            self::sanitizeSqlName($this->config->getAlias('projection_class')),
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('projection_id')),
-            self::sanitizeSqlName($this->config->getAlias('projection_class'))
+            $this->config->getAlias('projection_id'),
+            $this->config->getAlias('projection_class'),
+            $this->config->getTable(),
+            $this->config->getAlias('projection_id'),
+            $this->config->getAlias('projection_class'),
         );
         $query = $this->pdo->prepare($sql);
         $success = $query->execute([
@@ -122,10 +122,7 @@ class PdoProjectionStoreAdapter implements AdapterInterface
 
     public function purge(): void
     {
-        $sql = sprintf(
-            'delete from %s where 1=1',
-            self::sanitizeSqlName($this->config->getTable())
-        );
+        $sql = sprintf('delete from %s where 1=1', $this->config->getTable());
         $this->pdo->exec($sql);
     }
 
@@ -137,13 +134,13 @@ class PdoProjectionStoreAdapter implements AdapterInterface
         $this->remove($id, $class);
 
         $insertColumns = [
-            self::sanitizeSqlName($this->config->getAlias('projection_id')),
-            self::sanitizeSqlName($this->config->getAlias('projection_class')),
-            self::sanitizeSqlName($this->config->getAlias('projection_payload')),
+            $this->config->getAlias('projection_id'),
+            $this->config->getAlias('projection_class'),
+            $this->config->getAlias('projection_payload'),
         ];
         $sql = sprintf(
             'insert into %s (%s) values (:projectionId, :projectionClass, :projectionPayload)',
-            self::sanitizeSqlName($this->config->getTable()),
+            $this->config->getTable(),
             implode(',', $insertColumns)
         );
         $query = $this->pdo->prepare($sql);
@@ -161,9 +158,9 @@ class PdoProjectionStoreAdapter implements AdapterInterface
     {
         $sql = sprintf(
             'delete from %s where %s = :projectionId and %s = :projectionClass',
-            self::sanitizeSqlName($this->config->getTable()),
-            self::sanitizeSqlName($this->config->getAlias('projection_id')),
-            self::sanitizeSqlName($this->config->getAlias('projection_class'))
+            $this->config->getTable(),
+            $this->config->getAlias('projection_id'),
+            $this->config->getAlias('projection_class'),
         );
         $query = $this->pdo->prepare($sql);
         $success = $query->execute([
@@ -173,10 +170,5 @@ class PdoProjectionStoreAdapter implements AdapterInterface
         if (!$success) {
             throw new RuntimeException();
         }
-    }
-
-    private function sanitizeSqlName(string $value): string
-    {
-        return preg_replace('/[^a-zA-Z_]*/', '', $value);
     }
 }

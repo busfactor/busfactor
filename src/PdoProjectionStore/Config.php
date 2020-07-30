@@ -20,7 +20,7 @@ class Config
     public function withTable(string $table): self
     {
         $clone = clone $this;
-        $clone->table = $table;
+        $clone->table = $this->sanitizeSqlName($table);
         return $clone;
     }
 
@@ -30,7 +30,7 @@ class Config
             throw new InvalidArgumentException();
         }
         $clone = clone $this;
-        $clone->aliases[$column] = $alias;
+        $clone->aliases[$column] = $this->sanitizeSqlName($alias);
         return $clone;
     }
 
@@ -45,5 +45,10 @@ class Config
             throw new InvalidArgumentException();
         }
         return $this->aliases[$column];
+    }
+
+    private function sanitizeSqlName(string $value): string
+    {
+        return preg_replace('/[^a-zA-Z_]*/', '', $value);
     }
 }
