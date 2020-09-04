@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace BusFactor\Scenario;
 
+use BusFactor\CommandBus\CommandBus;
 use BusFactor\CommandBus\CommandBusInterface;
 use BusFactor\EventBus\EventBus;
 use BusFactor\EventStore\EventStore;
 use BusFactor\EventStore\EventStoreInterface;
 use BusFactor\EventStore\InMemoryEventStoreAdapter;
+use BusFactor\ProjectionStore\InMemoryProjectionStoreAdapter;
 use BusFactor\ProjectionStore\ProjectionStore;
 
 class Scenario
@@ -27,15 +29,19 @@ class Scenario
     /** @var ProjectionStoreTraceMiddleware */
     private $projectionStoreTrace;
 
-    public function __construct(EventBus $eventBus, CommandBusInterface $commandBus, ProjectionStore $projectionStore)
-    {
-        $this->eventBus = $eventBus;
-        $this->commandBus = $commandBus;
-        $this->eventStore = new EventStore(new InMemoryEventStoreAdapter());
+    public function __construct(
+        ?EventBus $eventBus = null,
+        ?CommandBusInterface $commandBus = null,
+        ?ProjectionStore $projectionStore = null,
+        ?EventStoreInterface $eventStore = null
+    ) {
+        $this->eventBus = $eventBus ?? new EventBus();
+        $this->commandBus = $commandBus ?? new CommandBus();
+        $this->eventStore = $eventStore ?? new EventStore(new InMemoryEventStoreAdapter());
         $this->eventBusTrace = new EventBusTraceMiddleware();
         $this->eventBus->addMiddleware($this->eventBusTrace);
         $this->projectionStoreTrace = new ProjectionStoreTraceMiddleware();
-        $projectionStore->addMiddleware($this->projectionStoreTrace);
+        ($projectionStore ?? new ProjectionStore(new InMemoryProjectionStoreAdapter()))->addMiddleware($this->projectionStoreTrace);
     }
 
     public function play(Play ...$plays): void
