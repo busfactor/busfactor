@@ -64,7 +64,7 @@ class Play
     public function doAction(callable $action): self
     {
         $clone = clone $this;
-        $clone->actions = array_merge($clone->actions, $action);
+        $clone->actions[] = $action;
         return $clone;
     }
 
