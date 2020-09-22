@@ -1,6 +1,4 @@
-parameters:
-    bin_dir: "./vendor/bin"
-    git_dir: "."
+grumphp:
     stop_on_failure: true
     tasks:
         git_commit_message:

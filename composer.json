@@ -14,17 +14,17 @@
     "php": ">=7.3",
     "ext-json": "*",
     "ext-pdo": "*",
-    "ramsey/uuid": "^3.8"
+    "ramsey/uuid": "^3.0 || ^4.0"
   },
   "require-dev": {
     "ext-pdo_sqlite": "*",
-    "friendsofphp/php-cs-fixer": "^2.15",
-    "illuminate/cache": "^5.8",
-    "phing/phing": "^2.16",
-    "phpro/grumphp": "^0.14",
-    "phpstan/phpstan": "^0.11.8",
-    "phpunit/phpunit": "^7.0",
-    "squizlabs/php_codesniffer": "^3.4"
+    "friendsofphp/php-cs-fixer": "^2",
+    "illuminate/cache": "^8",
+    "phing/phing": "^2",
+    "phpro/grumphp": "^0.22",
+    "phpstan/phpstan": "^0.12.0",
+    "phpunit/phpunit": "^9",
+    "squizlabs/php_codesniffer": "^3"
   },
   "autoload": {
     "psr-4": {
