@@ -23,6 +23,16 @@ class Config
         'event_time' => 'event_time',
     ];
 
+    /** @var bool */
+    private $eventBuffering = true;
+
+    public function withEventBuffering(bool $active): self
+    {
+        $clone = clone $this;
+        $clone->eventBuffering = $active;
+        return $clone;
+    }
+
     public function withTable(string $table): self
     {
         $clone = clone $this;
@@ -38,6 +48,11 @@ class Config
         $clone = clone $this;
         $clone->aliases[$column] = $this->sanitizeSqlName($alias);
         return $clone;
+    }
+
+    public function getEventBuffering(): bool
+    {
+        return $this->eventBuffering;
     }
 
     public function getTable(): string

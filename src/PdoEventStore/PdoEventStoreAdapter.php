@@ -205,14 +205,21 @@ class PdoEventStoreAdapter implements AdapterInterface
         $query->execute($filteredEvents);
         $events = [];
         while ($row = $query->fetch()) {
-            $events[] = [
+            $event = [
                 'stream_id' => $row[$this->config->getAlias('stream_id')],
                 'stream_type' => $row[$this->config->getAlias('stream_type')],
                 'event' => $this->buildEventFromRow($row),
             ];
+            if ($this->config->getEventBuffering()) {
+                $events[] = $event;
+            } else {
+                $inspector->inspect($event['stream_id'], $event['stream_type'], $event['event']);
+            }
         };
-        while ($event = array_shift($events)) {
-            $inspector->inspect($event['stream_id'], $event['stream_type'], $event['event']);
+        if ($this->config->getEventBuffering()) {
+            while ($event = array_shift($events)) {
+                $inspector->inspect($event['stream_id'], $event['stream_type'], $event['event']);
+            }
         }
     }
 
