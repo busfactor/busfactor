@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BusFactor\EventStore;
@@ -107,8 +108,10 @@ class InMemoryEventStoreAdapter implements AdapterInterface
             $version = $pair[1];
             /** @var Envelope $envelope */
             $envelope = $this->storage[$key]['envelopes'][$version];
-            if (empty($inspector->getFilter()->getClasses())
-                || in_array(get_class($envelope->getEvent()), $inspector->getFilter()->getClasses())) {
+            if (
+                empty($inspector->getFilter()->getClasses())
+                || in_array(get_class($envelope->getEvent()), $inspector->getFilter()->getClasses())
+            ) {
                 $inspector->inspect($this->storage[$key]['id'], $this->storage[$key]['type'], $envelope);
             }
         }

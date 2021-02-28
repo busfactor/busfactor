@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BusFactor\ObjectSerializer;
@@ -21,7 +22,7 @@ class MiddlewareTest extends TestCase
         $serializer->addMiddleware($mw2);
         $serializer->addMiddleware($mw3);
 
-        $serializer->deserialize($serializer->serialize(new stdClass));
+        $serializer->deserialize($serializer->serialize(new stdClass()));
         $this->assertEquals($output->read(), [
             'before serialize mw3',
             'before serialize mw2',
