@@ -54,8 +54,6 @@ class PdoProxyTest extends TestCase
         $query = $pdo->prepare('INSERT INTO foo (id, message) VALUES (:id, :message)');
         $this->assertInstanceOf(PDOStatement::class, $query);
 
-        $this->assertFalse($pdo->prepare('buggy query'));
-
         $success = $query->execute([
             'id' => 1,
             'message' => 'hello world',
@@ -72,8 +70,6 @@ class PdoProxyTest extends TestCase
                 'message' => 'hello world',
             ],
         ], $rows);
-
-        $this->assertFalse($pdo->query('buggy query'));
 
         $this->assertEquals(1, $pdo->exec('DELETE FROM foo'));
 
