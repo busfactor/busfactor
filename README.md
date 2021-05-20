@@ -1,7 +1,6 @@
 # BusFactor
 
 [![Latest Version](https://img.shields.io/github/release/busfactor/busfactor.svg)](https://github.com/busfactor/busfactor/releases)
-[![Build Status](https://img.shields.io/travis/busfactor/busfactor.svg)](https://travis-ci.org/busfactor/busfactor)
 [![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 BusFactor is a modern PHP library providing several components you can mix and match to implement the CQRS and Event Sourcing patterns in your application.
