@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace BusFactor\EventStream;
 
 use ReflectionClass;
-use ReflectionParameter;
 use RuntimeException;
 
 trait SerializationTrait
@@ -23,12 +22,14 @@ trait SerializationTrait
         $constructor = $class->getConstructor();
         if ($constructor) {
             foreach ($constructor->getParameters() as $parameter) {
-                /** @var ReflectionParameter $parameter */
                 $paramName = $parameter->getName();
-                if (!array_key_exists($paramName, $data)) {
+                $optional = $parameter->isOptional();
+                if (!array_key_exists($paramName, $data) && !$optional) {
                     throw new RuntimeException(sprintf("Deserialization error: No payload value for the constructor argument named '%s'.", $paramName));
                 }
-                $args[] = $data[$paramName];
+                if (array_key_exists($paramName, $data)) {
+                    $args[] = $data[$paramName];
+                }
             }
         }
 

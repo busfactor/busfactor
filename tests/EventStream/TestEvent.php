@@ -20,11 +20,15 @@ class TestEvent implements StreamEventInterface
     /** @var array */
     private $array;
 
-    public function __construct(string $string, int $integer, array $array)
+    /** @var bool */
+    private $bool;
+
+    public function __construct(string $string, int $integer, array $array, bool $bool = false)
     {
         $this->string = $string;
         $this->integer = $integer;
         $this->array = $array;
+        $this->bool = $bool;
     }
 
     public function getString(): string
@@ -40,5 +44,10 @@ class TestEvent implements StreamEventInterface
     public function getArray(): array
     {
         return $this->array;
+    }
+
+    public function getBool(): bool
+    {
+        return $this->bool;
     }
 }
