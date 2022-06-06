@@ -70,9 +70,7 @@ class AggregateStore implements AggregateStoreInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (AggregateStoreInterface $carry, MiddlewareInterface $item): AggregateStoreInterface {
-                return new StoreDelegator($item, $carry);
-            },
+            fn (AggregateStoreInterface $carry, MiddlewareInterface $item): AggregateStoreInterface => new StoreDelegator($item, $carry),
             $this->adapter
         );
     }

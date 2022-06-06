@@ -53,9 +53,7 @@ class ObjectSerializer implements ObjectSerializerInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (ObjectSerializerInterface $carry, MiddlewareInterface $item): ObjectSerializerInterface {
-                return new ObjectSerializerDelegator($item, $carry);
-            },
+            fn (ObjectSerializerInterface $carry, MiddlewareInterface $item): ObjectSerializerInterface => new ObjectSerializerDelegator($item, $carry),
             $this->adapter
         );
     }

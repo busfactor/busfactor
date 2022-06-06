@@ -51,9 +51,7 @@ class CommandBus implements CommandBusInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (CommandDispatcherInterface $carry, MiddlewareInterface $item): CommandDispatcherInterface {
-                return new CommandDispatcherDelegator($item, $carry);
-            },
+            fn (CommandDispatcherInterface $carry, MiddlewareInterface $item): CommandDispatcherInterface => new CommandDispatcherDelegator($item, $carry),
             $this->router
         );
     }

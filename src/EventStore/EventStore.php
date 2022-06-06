@@ -75,9 +75,7 @@ class EventStore implements EventStoreInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (EventStoreInterface $carry, MiddlewareInterface $item): EventStoreInterface {
-                return new StoreDelegator($item, $carry);
-            },
+            fn (EventStoreInterface $carry, MiddlewareInterface $item): EventStoreInterface => new StoreDelegator($item, $carry),
             $this->adapter
         );
     }

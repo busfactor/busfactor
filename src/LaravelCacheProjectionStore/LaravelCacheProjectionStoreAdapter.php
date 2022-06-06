@@ -77,7 +77,7 @@ class LaravelCacheProjectionStoreAdapter implements AdapterInterface
 
     private function store(ProjectionInterface $projection): void
     {
-        $class = get_class($projection);
+        $class = $projection::class;
         $id = $projection->getId();
         $key = $this->resolveKey($id, $class);
         $this->cache->forever($key, $projection);

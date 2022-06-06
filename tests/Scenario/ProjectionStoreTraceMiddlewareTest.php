@@ -55,7 +55,7 @@ class ProjectionStoreTraceMiddlewareTest extends TestCase
 
     private function createProjection(): ProjectionInterface
     {
-        return new class implements ProjectionInterface {
+        return new class () implements ProjectionInterface {
             public function getId(): string
             {
                 return __CLASS__;

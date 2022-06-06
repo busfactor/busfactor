@@ -24,7 +24,7 @@ class EnvelopeTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $event = new class implements EventInterface {
+        $event = new class () implements EventInterface {
         };
 
         Envelope::fromRecordedEvent(new RecordedEvent($event, 1));

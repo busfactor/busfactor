@@ -58,10 +58,10 @@ class PlayerTest extends TestCase
             ->dispatch(
                 new RegisterPlayerCommand('123', 1234, 'John Smith')
             )
-            ->testEvents(function (PublishedStreams $streams) {
+            ->testEvents(function (PublishedStreams $streams): void {
                 $this->assertPublishedStreamsContainExactly([PlayerRegisteredEvent::class => 1], $streams);
             })
-            ->testProjections(function (UpdatedProjections $projections) {
+            ->testProjections(function (UpdatedProjections $projections): void {
                 $this->assertUpdatedProjectionsContainExactly([PlayerListProjection::class => 1], $projections);
 
                 /** @var PlayerListProjection $projection */

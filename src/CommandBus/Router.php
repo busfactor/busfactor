@@ -23,7 +23,7 @@ class Router implements CommandDispatcherInterface
 
     private function route(CommandInterface $command): void
     {
-        $name = get_class($command);
+        $name = $command::class;
         if (isset($this->map[$name])) {
             $this->map[$name]->handle($command);
         }

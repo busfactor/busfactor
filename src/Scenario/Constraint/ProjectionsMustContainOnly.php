@@ -33,7 +33,7 @@ class ProjectionsMustContainOnly extends Constraint
     {
         $result = true;
         foreach ($updatedProjections->getAll() as $projection) {
-            $result = $result && (get_class($projection) === $this->projectionClass);
+            $result = $result && ($projection::class === $this->projectionClass);
         }
         return $result;
     }

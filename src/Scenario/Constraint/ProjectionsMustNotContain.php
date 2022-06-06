@@ -32,7 +32,7 @@ class ProjectionsMustNotContain extends Constraint
     public function matches($updatedProjections): bool
     {
         foreach ($updatedProjections->getAll() as $projection) {
-            if (get_class($projection) === $this->projectionClass) {
+            if ($projection::class === $this->projectionClass) {
                 return false;
             }
         }

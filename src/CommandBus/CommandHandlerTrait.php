@@ -10,7 +10,7 @@ trait CommandHandlerTrait
 {
     public function handle(CommandInterface $command): void
     {
-        $classParts = explode('\\', get_class($command));
+        $classParts = explode('\\', $command::class);
         $method = 'handle' . end($classParts);
 
         if (method_exists($this, $method)) {

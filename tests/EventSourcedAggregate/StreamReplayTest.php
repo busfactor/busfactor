@@ -17,9 +17,7 @@ class StreamReplayTest extends TestCase
         $agg1 = TestEventSourcedAggregate::create('123', 'john');
         $agg1->setName('Bill');
 
-        $stream = array_reduce($agg1->pullNewEvents(), function (Stream $stream, RecordedEvent $event) {
-            return $stream->withEnvelope(Envelope::fromRecordedEvent($event));
-        }, new Stream($agg1->getAggregateId(), $agg1::getType()));
+        $stream = array_reduce($agg1->pullNewEvents(), fn (Stream $stream, RecordedEvent $event) => $stream->withEnvelope(Envelope::fromRecordedEvent($event)), new Stream($agg1->getAggregateId(), $agg1::getType()));
 
         $agg2 = new TestEventSourcedAggregate('123');
         $agg2->replayStream($stream);

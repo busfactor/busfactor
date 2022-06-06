@@ -34,9 +34,9 @@ trait AggregateEntityTrait
             $this->$method($recordedEvent->getEvent(), $recordedEvent);
         }
         foreach ($this->aggregateEntityTrait_childEntities as $entity) {
-            ((function () use ($recordedEvent) {
+            ((function () use ($recordedEvent): void {
                 $this->__handle($recordedEvent);
-            })->bindTo($entity, get_class($entity)))();
+            })->bindTo($entity, $entity::class))();
         }
     }
 
@@ -46,7 +46,7 @@ trait AggregateEntityTrait
         if (!in_array(AggregateEntityTrait::class, class_uses($entity))) {
             throw new RuntimeException(sprintf(
                 'Class %s must use trait %s.',
-                get_class($entity),
+                $entity::class,
                 AggregateEntityTrait::class
             ));
         }
@@ -60,7 +60,7 @@ trait AggregateEntityTrait
         if (!$this->aggregateEntityTrait_root) {
             throw new RuntimeException('Entity is not bound to an aggregate root.');
         }
-        ((function () use ($event) {
+        ((function () use ($event): void {
             $this->apply($event);
         })->bindTo($this->aggregateEntityTrait_root, get_class($this->aggregateEntityTrait_root)))();
     }

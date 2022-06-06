@@ -130,7 +130,7 @@ class PdoProjectionStoreAdapter implements AdapterInterface
     private function store(ProjectionInterface $projection): void
     {
         $id = $projection->getId();
-        $class = get_class($projection);
+        $class = $projection::class;
         $payload = $this->serializer->serialize($projection);
         $this->remove($id, $class);
 

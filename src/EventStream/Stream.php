@@ -41,9 +41,7 @@ class Stream
     {
         $clone = clone $this;
         $clone->envelopes[] = $envelope;
-        usort($clone->envelopes, function (Envelope $a, Envelope $b) {
-            return $a->getVersion() <=> $b->getVersion();
-        });
+        usort($clone->envelopes, fn (Envelope $a, Envelope $b) => $a->getVersion() <=> $b->getVersion());
 
         if ($clone->highestVersion == 0) {
             $clone->highestVersion = $envelope->getVersion();

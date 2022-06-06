@@ -13,7 +13,7 @@ trait EventHandlerTrait
     {
         $event = $envelope->getEvent();
 
-        $classParts = explode('\\', get_class($event));
+        $classParts = explode('\\', $event::class);
         $method = 'handle' . end($classParts);
 
         if (method_exists($this, $method)) {

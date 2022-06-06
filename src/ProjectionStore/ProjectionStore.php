@@ -79,9 +79,7 @@ class ProjectionStore implements ProjectionStoreInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (ProjectionStoreInterface $carry, MiddlewareInterface $item): ProjectionStoreInterface {
-                return new OperatorDelegator($item, $carry);
-            },
+            fn (ProjectionStoreInterface $carry, MiddlewareInterface $item): ProjectionStoreInterface => new OperatorDelegator($item, $carry),
             $this->store
         );
     }

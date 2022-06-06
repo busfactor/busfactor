@@ -42,7 +42,7 @@ class ProjectionsMustContainExactly extends Constraint
     {
         $this->found = 0;
         foreach ($updatedProjections->getAll() as $projection) {
-            if (get_class($projection) === $this->projectionClass) {
+            if ($projection::class === $this->projectionClass) {
                 $this->found++;
             }
         }

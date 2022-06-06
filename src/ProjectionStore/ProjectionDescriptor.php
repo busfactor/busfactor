@@ -22,7 +22,7 @@ class ProjectionDescriptor
 
     public static function fromProjection(ProjectionInterface $projection): self
     {
-        return new static($projection->getId(), get_class($projection));
+        return new static($projection->getId(), $projection::class);
     }
 
     public function getKey(): string

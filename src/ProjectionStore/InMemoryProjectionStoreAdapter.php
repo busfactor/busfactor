@@ -37,7 +37,7 @@ class InMemoryProjectionStoreAdapter implements AdapterInterface
     public function commit(UnitOfWork $unit): void
     {
         foreach ($unit->getStored() as $projection) {
-            $class = get_class($projection);
+            $class = $projection::class;
             $id = $projection->getId();
             $this->projections[$class][$id] = $projection;
         }

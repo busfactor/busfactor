@@ -53,9 +53,7 @@ class EventBus implements EventBusInterface
     {
         $this->chain = array_reduce(
             $this->middlewares,
-            function (EventStreamPublisherInterface $carry, MiddlewareInterface $item): EventStreamPublisherInterface {
-                return new EventStreamPublisherDelegator($item, $carry);
-            },
+            fn (EventStreamPublisherInterface $carry, MiddlewareInterface $item): EventStreamPublisherInterface => new EventStreamPublisherDelegator($item, $carry),
             $this->dispatcher
         );
     }

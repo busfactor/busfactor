@@ -33,7 +33,7 @@ class UpdatedProjections implements Countable
     {
         $projections = [];
         foreach ($this->updatedProjections as $projection) {
-            if (get_class($projection) === $projectionClass) {
+            if ($projection::class === $projectionClass) {
                 $projections[] = $projection;
             }
         }

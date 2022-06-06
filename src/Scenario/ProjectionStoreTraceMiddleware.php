@@ -89,7 +89,7 @@ class ProjectionStoreTraceMiddleware implements MiddlewareInterface
 
     private function addOrReplaceProjection(ProjectionInterface $projection): void
     {
-        $key = self::resolveKey($projection->getId(), get_class($projection));
+        $key = self::resolveKey($projection->getId(), $projection::class);
         $this->traceStack[$key] = $projection;
     }
 
