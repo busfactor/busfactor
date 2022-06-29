@@ -6,7 +6,6 @@ namespace BusFactor\EventStore;
 
 use BusFactor\EventStream\Envelope;
 use BusFactor\EventStream\Stream;
-use RuntimeException;
 
 class InMemoryEventStoreAdapter implements AdapterInterface
 {
@@ -100,17 +99,14 @@ class InMemoryEventStoreAdapter implements AdapterInterface
 
     public function inspect(InspectorInterface $inspector): void
     {
-        if ($inspector->getFilter()->isReverse() || $inspector->getFilter()->getLimit()) {
-            throw new RuntimeException('Not implemented.');
-        }
         foreach ($this->chronologicalIndex as $pair) {
             $key = $pair[0];
             $version = $pair[1];
             /** @var Envelope $envelope */
             $envelope = $this->storage[$key]['envelopes'][$version];
             if (
-                empty($inspector->getFilter()->getClasses())
-                || in_array(get_class($envelope->getEvent()), $inspector->getFilter()->getClasses())
+                empty($inspector->getFilter()->get('classes'))
+                || in_array(get_class($envelope->getEvent()), $inspector->getFilter()->get('classes'))
             ) {
                 $inspector->inspect($this->storage[$key]['id'], $this->storage[$key]['type'], $envelope);
             }
