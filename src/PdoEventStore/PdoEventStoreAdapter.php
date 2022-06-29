@@ -184,22 +184,21 @@ class PdoEventStoreAdapter implements AdapterInterface
         $limit = (int) $inspector->getFilter()->get('limit');
         $filteredEvents = $inspector->getFilter()->get('classes') ?? [];
 
+        $whereClause = 'where 1=1';
         if (count($filteredEvents)) {
             $questionMarks = str_repeat('?,', count($filteredEvents) - 1) . '?';
-            $whereClause = sprintf(
-                'where %s in (%s)',
+            $whereClause .= sprintf(
+                ' and `%s` in (%s)',
                 $this->config->getAlias('event_class'),
                 $questionMarks
             );
-        } else {
-            $whereClause = '';
         }
 
         if ($upToSequence && !$reverse && !$afterSequence) {
-            $whereClause .= sprintf(' and (%s <= %d)', $this->config->getAlias('sequence'), $upToSequence);
+            $whereClause .= sprintf(' and (`%s` <= %d)', $this->config->getAlias('sequence'), $upToSequence);
         }
         if ($afterSequence && !$reverse && !$upToSequence) {
-            $whereClause .= sprintf(' and (%s > %d)', $this->config->getAlias('sequence'), $afterSequence);
+            $whereClause .= sprintf(' and (`%s` > %d)', $this->config->getAlias('sequence'), $afterSequence);
         }
 
         $limitClause = $limit ? 'limit ' . $limit : '';
