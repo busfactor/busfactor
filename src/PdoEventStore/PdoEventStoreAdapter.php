@@ -163,15 +163,17 @@ class PdoEventStoreAdapter implements AdapterInterface
                 if (json_last_error()) {
                     throw new JsonSerializationException(json_last_error_msg());
                 }
-            } catch (Exception $e) {
-                if ($e instanceof PDOException) {
-                    throw new ConcurrencyException(sprintf(
-                        'Version %s for stream %s-%s already exists.',
-                        $values['version'],
-                        $stream->getStreamType(),
-                        $stream->getStreamId()
-                    ));
+            } catch (PDOException $e) {
+                if ('23000' !== (string) $e->getCode()) {
+                    throw $e;
                 }
+                $message = sprintf(
+                    'Version %s for stream %s-%s already exists: ' . $e->getMessage(),
+                    $values['version'],
+                    $stream->getStreamType(),
+                    $stream->getStreamId()
+                );
+                throw new ConcurrencyException($message, 0, $e);
             }
         }
     }
